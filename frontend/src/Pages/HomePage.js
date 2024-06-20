@@ -19,7 +19,7 @@ const HomePage = () => {
         borderWidth="1px"
       >
         <Text fontSize="4xl" fontFamily="work sans" color="black">
-          Chat-Me
+          React -JS
         </Text>
       </Box>
 

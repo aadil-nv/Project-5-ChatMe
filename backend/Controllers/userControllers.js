@@ -10,11 +10,11 @@ const registerUser =asyncHandler (async (req,res)=>{
 
     if (!name || !email || !password || !picture) {
         res.status(400);
-        throw new Error("plaese enter all fields ");
+        throw new Error("plaese enter all fields");
     }
 
-    const userExist = await User.findOne({email})
-
+    const userExist = await User.findOne({email});
+    
     if(userExist){
         res.status(400);
         throw new Error("User already exist");
@@ -40,19 +40,25 @@ const registerUser =asyncHandler (async (req,res)=>{
 })
 
 const authUser = asyncHandler(async (req,res)=>{
+    console.log("XXXXXXXXXXXXXX=====Coming Here======XXXXXXXXXXXXXXXX");
     const {email,password} = req.body
+    console.log("+++++++++++++++++++++++++++++++",req.body);
 
     const user =  await User.findOne({email});
-
-    if(user && (await user.matchPassword(password))){
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx"+user);
+    
+    if (user && (await user.matchPassword(password))) {
         res.json({
-            _id:user._id,
-            name :user.name,
-            email : user.email,
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            picture: user.picture,
             password : user.password,
-            picture : user.picture,
-            token : genarateToken(user._id)
-        })
+            // token: generateToken(user._id)
+        });
+    } else {
+        res.status(401);
+        throw new Error("Invalid Email or Password");
     }
 })
 
