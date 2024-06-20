@@ -6,7 +6,7 @@ import Signup from "../Components/Authentication/Signup";
 
 const HomePage = () => {
   return (
-    <Container maxWidth="xl" centerContent>
+    <Container maxWidth="xl"  centerContent>
       <Box
         display="flex"
         justifyContent="center"
@@ -14,7 +14,7 @@ const HomePage = () => {
         p={3}
         bg={"white"}
         w="100%"
-        m="40px 0 15px 0"
+        m="0px 0 15px 0px"
         borderRadius="lg"
         borderWidth="1px"
       >

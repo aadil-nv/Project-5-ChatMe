@@ -71,6 +71,9 @@ const Signup = () => {
 
   const submitHandler = async () => {
     setLoading(true);
+    const nameRegex = /^(?![\s-.]*$)(?!.*[\s-.]{2})[A-Za-z\s-.]{2,}$/;  
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
     if (!name || !email || !password || !confirmPassword) {
       toast({
         title: 'Please fill all the fields',
@@ -81,6 +84,42 @@ const Signup = () => {
       setLoading(false);
       return;
     }
+    if (!nameRegex.test(name)) {
+      toast({
+          title: 'Invalid name',
+          description: 'Name must have at least two characters, and not contain only symbols or spaces.',
+          status: 'warning',
+          duration: 5000,
+          isClosable: true,
+      });
+      setLoading(false);
+      return;
+  }
+
+  // Validate email
+  if (!emailRegex.test(email)) {
+      toast({
+          title: 'Invalid email format',
+          status: 'warning',
+          duration: 5000,
+          isClosable: true,
+      });
+      setLoading(false);
+      return;
+  }
+
+  // Validate password
+  if (!passwordRegex.test(password)) {
+      toast({
+          title: 'Invalid password format',
+          description: 'Password must be at least 8 characters long and contain at least one uppercase letter and one symbol.',
+          status: 'warning',
+          duration: 5000,
+          isClosable: true,
+      });
+      setLoading(false);
+      return;
+  }
 
     if (password !== confirmPassword) {
       toast({

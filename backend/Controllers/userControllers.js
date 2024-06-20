@@ -4,6 +4,12 @@ const router = require('../Routes/userRoute');
 const genarateToken = require('../Config/genarateToken')
 
 
+
+
+
+//! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-------------REGISTER USER------------XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
 const registerUser =asyncHandler (async (req,res)=>{
     const {name,email,password,picture} =req.body;
 
@@ -19,11 +25,11 @@ const registerUser =asyncHandler (async (req,res)=>{
         res.status(400);
         throw new Error("User already exist");
     }
-
+    
     const user = await User.create({
         name,email,password,picture
     });
-
+    
     if(user){
         res.status(201).json({
             _id:user._id,
@@ -39,13 +45,18 @@ const registerUser =asyncHandler (async (req,res)=>{
     }
 })
 
+//! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-------------REGISTER USER - Ending------------XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+
+//! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-------------AUTHERISING USER------------XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 const authUser = asyncHandler(async (req,res)=>{
-    console.log("XXXXXXXXXXXXXX=====Coming Here======XXXXXXXXXXXXXXXX");
+    
     const {email,password} = req.body
-    console.log("+++++++++++++++++++++++++++++++",req.body);
+    
 
     const user =  await User.findOne({email});
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxx"+user);
+    
     
     if (user && (await user.matchPassword(password))) {
         res.json({
@@ -61,5 +72,28 @@ const authUser = asyncHandler(async (req,res)=>{
         throw new Error("Invalid Email or Password");
     }
 })
+//! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-------------AUTHERISING USER Ending------------XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-module.exports = {registerUser,authUser}
+
+
+//! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX------------ALL Users-------------XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+const allUsers = asyncHandler (async (req,res)=>{
+    const keyword = req.query.search ? {
+        $or: [
+            {name : {$regex : req.query.search , $options : "i"}},
+            {email : {$regex : req.query.search , $options : "i"}},
+        ]
+    } : {};
+
+    const users = await User.find(keyword).find({_id:{ $ne : req.user._id }})
+    res.send(users)
+    
+})
+
+
+//! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-------------Ending------------XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+module.exports = {registerUser,authUser,allUsers}

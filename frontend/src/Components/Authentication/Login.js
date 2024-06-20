@@ -27,6 +27,10 @@ const Login = () => {
   const handleClick = () => setShow(!show)
 
   const submitHandler = async () => {
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+
     setLoading(true);
     if (!email || !password) {
       toast({
@@ -38,6 +42,28 @@ const Login = () => {
       setLoading(false);
       return;
     }
+    if (!emailRegex.test(email)) {
+      toast({
+          title: 'Invalid email format',
+          status: 'warning',
+          duration: 5000,
+          isClosable: true,
+      });
+      setLoading(false);
+      return;
+  }
+
+  if (!passwordRegex.test(password)) {
+      toast({
+          title: 'Invalid password format',
+          description: 'Password must be at least 8 characters long and contain at least one uppercase letter and one symbol',
+          status: 'warning',
+          duration: 5000,
+          isClosable: true,
+      });
+      setLoading(false);
+      return;
+  }
     try {
       const config = {
         headers: {
@@ -81,6 +107,7 @@ const Login = () => {
         <FormLabel>Email</FormLabel>
         <Input
           placeholder="Enter Your Name"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
       </FormControl>
@@ -91,6 +118,7 @@ const Login = () => {
           <Input
             type={show ? "text" : "password"}
             placeholder="Enter Your Email"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <InputRightElement width="4.5rem">
@@ -118,7 +146,7 @@ const Login = () => {
         width="100%"
         onClick={() => {
           setEmail("guest@example.com");
-          setPassword("123456");
+          setPassword("Guest@123");
         }}
       >
         Get User Credentials
