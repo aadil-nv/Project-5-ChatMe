@@ -4,9 +4,9 @@ const router = require('../Routes/userRoute');
 const genarateToken = require('../Config/genarateToken')
 
 
-const registerUser =asyncHandler (async ()=>{
+const registerUser =asyncHandler (async (req,res)=>{
     const {name,email,password,picture} =req.body;
-    console.log("=====================",name);
+
 
     if (!name || !email || !password || !picture) {
         res.status(400);
@@ -25,7 +25,7 @@ const registerUser =asyncHandler (async ()=>{
     });
 
     if(user){
-        res.status(201),json({
+        res.status(201).json({
             _id:user._id,
             name :user.name,
             email : user.email,

@@ -10,7 +10,7 @@ dotenv.config()
 connectDB()
 
 const app = express();
-const PORT=process.env.PORT || 7000;
+const PORT=process.env.PORT || 5000;
 
 app.use(express.json())
 app.use(cors());
@@ -22,8 +22,9 @@ app.get('/',(req,res)=>{
 
 app.use('/api/user',userRoute);
 
+
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(7000, console.log(`server started on port http://localhost:${PORT}`.bgBrightYellow.bold.underline));
+app.listen(5000, console.log(`server started on port http://localhost:${PORT}`.bgBrightYellow.bold.underline));
 
